@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     }
 
     // 2️⃣ Handle EntityNotFoundException
-    @ExceptionHandler(EntityNotFoundException.class)
+    @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex){
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
@@ -68,6 +68,7 @@ public class GlobalExceptionHandler {
         body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
         body.put("error", "Internal Server Error");
         body.put("message", ex.getMessage());
+        //ex.getMessage in prod is dangerous  - change it to a string and use logger for logging errors.
 
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -13,6 +13,6 @@ import java.util.List;
 public class ProductRequestDTO {
     private String name;
     private String description;
-    private List<Long> categoryId;
+    private List<Long> categoryIds;
     private Double price;
 }
