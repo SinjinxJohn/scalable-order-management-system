@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
 
     // 2️⃣ Handle EntityNotFoundException
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex){
+    public ResponseEntity<Object> handleEntityNotFound(ResourceNotFoundException ex){
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.NOT_FOUND.value());
@@ -72,4 +72,5 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }

@@ -7,6 +7,7 @@ import com.example.oms.exceptions.ResourceNotFoundException;
 import com.example.oms.user.User;
 import com.example.oms.user.UserResponseDTO;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,12 +25,12 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
 
 
-    public ProductResponseDTO createProduct(ProductRequestDTO productRequestDTO){
-        List<Category> categoryList = categoryRepository.findAllById(productRequestDTO.getCategoryIds());
-        if(categoryList.size() != productRequestDTO.getCategoryIds().size()){
+    public ProductResponseDTO createProduct(@Valid ProductRequestDTO productRequestDTO){
+        List<Category> categoryList = categoryRepository.findAllById(productRequestDTO.getCategories());
+        if(categoryList.size() != productRequestDTO.getCategories().size()){
             throw new ResourceNotFoundException("Invalid category ID");
         }
-        Product product = Product.builder().price(productRequestDTO.getPrice()).name(productRequestDTO.getName()).categoryList(categoryList).description(productRequestDTO.getDescription()).build();
+        Product product = Product.builder().price(productRequestDTO.getPrice()).name(productRequestDTO.getName()).categories(categoryList).description(productRequestDTO.getDescription()).build();
         Product savedProduct = null;
 
         savedProduct = productRepository.save(product);

@@ -18,7 +18,7 @@ public class ProductResponseDTO {
     private Long id;
     private String name;
     private String description;
-    private List<CategoryResponseDTO> category;
+    private List<CategoryResponseDTO> categories;
     private Double price;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
