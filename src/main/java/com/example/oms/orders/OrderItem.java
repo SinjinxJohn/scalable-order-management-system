@@ -7,6 +7,8 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,7 +29,15 @@ public class OrderItem {
 
     @Min(value = 0)
     @Column(nullable = false)
-    private Double unitPrice;
+    private BigDecimal unitPrice;
+
+    @Min(value=1)
+    @Column(nullable = false)
+    private Integer quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     @CreatedDate
     private LocalDateTime createdAt;

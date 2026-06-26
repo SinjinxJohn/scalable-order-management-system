@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,15 +29,19 @@ public class Order {
     @Column(nullable = false)
     private OrderStatus orderStatus;
 
-    @OneToMany
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "order_id")
-    private List<OrderItem> orderItem;
+    private List<OrderItem> orderItems;
 
     @Min(value = 0)
-    private double totalAmount;
+    private BigDecimal totalAmount;
 
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public void addOrderItem(OrderItem orderItem){
+        orderItems.add(orderItem);
+    }
 }

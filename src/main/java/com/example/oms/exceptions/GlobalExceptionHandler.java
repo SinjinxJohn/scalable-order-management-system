@@ -19,8 +19,8 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     // 1️⃣ Handle ResourceAlreadyExists
-    @ExceptionHandler(ResourceAlreadyExists.class)
-    public ResponseEntity<Object> handleResourceAlreadyExists(ResourceAlreadyExists ex){
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<Object> handleResourceAlreadyExists(ResourceAlreadyExistsException ex){
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.CONFLICT.value());
@@ -40,6 +40,16 @@ public class GlobalExceptionHandler {
         body.put("message", ex.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(InsufficientInventoryException.class)
+    public ResponseEntity<Object> handleEntityNotFound(InsufficientInventoryException ex){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.UNPROCESSABLE_ENTITY.value());
+        body.put("error", "Not Found");
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     // 3️⃣ Handle Validation Errors (@Valid)

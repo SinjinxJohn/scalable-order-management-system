@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class Product {
 
     @Positive //ensures the data is positive
     @Column(nullable = false)
-    private Double price;
+    private BigDecimal price;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"),inverseJoinColumns = @JoinColumn(name = "category_id"))

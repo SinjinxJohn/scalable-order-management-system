@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -14,5 +15,5 @@ public class ProductRequestDTO {
     private String name;
     private String description;
     private List<Long> categories;
-    private Double price;
+    private BigDecimal price;
 }

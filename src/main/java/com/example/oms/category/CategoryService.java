@@ -1,6 +1,5 @@
 package com.example.oms.category;
-
-import com.example.oms.exceptions.ResourceAlreadyExists;
+import com.example.oms.exceptions.ResourceAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ public class CategoryService {
     public CategoryResponseDTO create(CategoryRequestDTO categoryRequestDTO){
         boolean exists = categoryRepository.existsByName(categoryRequestDTO.getName());
         if(exists){
-            throw new ResourceAlreadyExists("Category already exists");
+            throw new ResourceAlreadyExistsException("Category already exists");
         }
 
         Category category = Category.builder().name(categoryRequestDTO.getName()).build();
