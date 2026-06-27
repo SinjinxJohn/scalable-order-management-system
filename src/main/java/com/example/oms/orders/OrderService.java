@@ -52,7 +52,13 @@ public class OrderService {
 
         order.setTotalAmount(totalAmount);
         orderRepository.save(order);
-        return modelMapper.map(order, OrderResponseDTO.class);
+        OrderResponseDTO orderReponseDTO = modelMapper.map(order, OrderResponseDTO.class);
+        orderReponseDTO.setOrderItemIds(order.getOrderItems().stream()
+                .map(OrderItem::getId)
+                .toList());
+        
+        return orderReponseDTO;
+
 
     }
 

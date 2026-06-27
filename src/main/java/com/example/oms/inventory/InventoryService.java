@@ -1,7 +1,7 @@
 package com.example.oms.inventory;
 
 
-import com.example.oms.exceptions.ResourceAlreadyExists;
+import com.example.oms.exceptions.ResourceAlreadyExistsException;
 import com.example.oms.exceptions.ResourceNotFoundException;
 import com.example.oms.product.Product;
 import com.example.oms.product.ProductRepository;
@@ -24,7 +24,7 @@ public class InventoryService {
         Product product = productRepository.findById(inventoryRequestDTO.productId())
                 .orElseThrow(()-> new ResourceNotFoundException("Product with this id does not exist"));
         if(inventoryRepository.existsByProductId(product.getId())){
-            throw new ResourceAlreadyExists("Inventory with this product Id already exists");
+            throw new ResourceAlreadyExistsException("Inventory with this product Id already exists");
         }
         Inventory inventory = Inventory.builder()
                     .product(product)

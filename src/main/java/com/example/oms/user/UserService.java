@@ -1,7 +1,7 @@
 package com.example.oms.user;
 
 
-import com.example.oms.exceptions.ResourceAlreadyExists;
+import com.example.oms.exceptions.ResourceAlreadyExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 
@@ -10,9 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -28,7 +25,7 @@ public class UserService {
 
         boolean exists = userRepository.existsByEmail(userRequestDTO.getEmail());
         if(exists){
-            throw new ResourceAlreadyExists("User with the email already exists");
+            throw new ResourceAlreadyExistsException("User with the email already exists");
         }
         User user = User.builder().email(userRequestDTO.getEmail()).phone(userRequestDTO.getPhone())
                 .name(userRequestDTO.getName()).build();
@@ -37,7 +34,7 @@ public class UserService {
             return modelMapper.map(savedUser, UserResponseDTO.class);
         }
         catch(DataIntegrityViolationException e){
-            throw new ResourceAlreadyExists("Email already exists");
+            throw new ResourceAlreadyExistsException("Email already exists");
             }
     }
 
