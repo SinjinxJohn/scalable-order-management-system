@@ -2,7 +2,6 @@ package com.example.oms.orders;
 
 import com.example.oms.exceptions.InsufficientInventoryException;
 import com.example.oms.exceptions.ResourceNotFoundException;
-import com.example.oms.inventory.Inventory;
 import com.example.oms.inventory.InventoryRepository;
 import com.example.oms.product.Product;
 import com.example.oms.product.ProductRepository;
@@ -12,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +60,19 @@ public class OrderService {
         return orderReponseDTO;
 
 
+    }
+
+    public List<OrderResponseDTO> getAllOrders(){
+        List<Order> orders = orderRepository.findAllOrdersWithOrderItems();
+        return orders.stream().map(order -> {
+            OrderResponseDTO orderResponseDTO = modelMapper.map(order, OrderResponseDTO.class);
+            if(order.getOrderItems() != null){
+                orderResponseDTO.setOrderItemIds(order.getOrderItems().stream().map(OrderItem::getId).toList());
+            }else{
+                orderResponseDTO.setOrderItemIds(List.of());
+            }
+            return orderResponseDTO;
+        }).toList();
     }
 
 }

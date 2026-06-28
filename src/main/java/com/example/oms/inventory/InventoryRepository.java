@@ -10,7 +10,7 @@ public interface InventoryRepository extends JpaRepository<Inventory,Long> {
     boolean existsByProductId(Long productId);
     Optional<Inventory> findByProductId(Long productId);
 
-    @Modifying
+    @Modifying //this says the below query is a data modifying query like update queries.
     @Query(value = """
             UPDATE Inventory i
             SET i.availableQuantity = i.availableQuantity - :quantity,
