@@ -19,7 +19,7 @@ public class InventoryController {
         return new ResponseEntity<>(inventoryService.createInventory(inventoryRequestDTO), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/ {id}")
     ResponseEntity<InventoryResponseDTO> getInventoryById(@PathVariable("id") Long Id){
         return ResponseEntity.ok(inventoryService.getInventory(Id));
     }

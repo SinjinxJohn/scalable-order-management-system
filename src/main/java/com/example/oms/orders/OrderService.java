@@ -2,6 +2,7 @@ package com.example.oms.orders;
 
 import com.example.oms.exceptions.InsufficientInventoryException;
 import com.example.oms.exceptions.ResourceNotFoundException;
+import com.example.oms.inventory.Inventory;
 import com.example.oms.inventory.InventoryRepository;
 import com.example.oms.product.Product;
 import com.example.oms.product.ProductRepository;
@@ -31,11 +32,8 @@ public class OrderService {
         BigDecimal totalAmount = BigDecimal.ZERO;
         for(OrderItemRequestDTO orderItemRequestDTO: createOrderRequestDTO.getOrderItemList()){
             Product product = productRepository.findById(orderItemRequestDTO.getProductId()).orElseThrow(()->new ResourceNotFoundException("Product with id not found"));
-            if(!inventoryRepository.existsByProductId(product.getId())){
-                throw new ResourceNotFoundException("Inventory does not exist with this product ID: " + product.getId());
-            }
-
-            int rowsChanged = inventoryRepository.reserveStock(product.getId(), orderItemRequestDTO.getQuantity());
+            Inventory inventory = inventoryRepository.findByProductId(orderItemRequestDTO.getProductId()).orElseThrow(()-> new ResourceNotFoundException("Inventory with id not found"));
+            int rowsChanged = inventoryRepository.reserveStock(product.getId(), orderItemRequestDTO.getQuantity(),inventory.getVersion());
             if(rowsChanged == 0){
                 throw new InsufficientInventoryException("Inventory does not contain enough quantity for the product: " + product.getName());
             }

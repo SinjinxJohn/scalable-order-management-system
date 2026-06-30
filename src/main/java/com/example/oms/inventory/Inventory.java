@@ -31,6 +31,9 @@ public class Inventory {
     @Column(nullable = false)
     private Integer reservedQuantity;
 
+    @Version
+    private Long version;
+
     @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
