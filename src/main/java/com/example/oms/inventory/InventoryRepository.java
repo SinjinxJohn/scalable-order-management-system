@@ -20,5 +20,5 @@ public interface InventoryRepository extends JpaRepository<Inventory,Long> {
               AND i.availableQuantity >= :quantity
               AND i.version = :expectedVersion
             """)
-    int reserveStock(@Param("productId") Long productId, @Param("quantity") int quantity, @Param("version") Long expectedVersion);
+    int reserveStock(@Param("productId") Long productId, @Param("quantity") int quantity, @Param("expectedVersion") Long expectedVersion);
 }

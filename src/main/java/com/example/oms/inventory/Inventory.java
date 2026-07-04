@@ -4,6 +4,7 @@ package com.example.oms.inventory;
 import com.example.oms.product.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -32,6 +33,7 @@ public class Inventory {
     private Integer reservedQuantity;
 
     @Version
+    @NotNull
     private Long version;
 
     @OneToOne

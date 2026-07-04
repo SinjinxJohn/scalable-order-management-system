@@ -6,6 +6,7 @@ package com.example.oms.exceptions;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -68,6 +69,17 @@ public class GlobalExceptionHandler {
         body.put("errors", fieldErrors);
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<Object> handleOptimisticLockingFailureExceptions(ObjectOptimisticLockingFailureException ex){
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.CONFLICT.value());
+        body.put("error", "Conflict");
+        body.put("message", "The item stock was modified by a concurrent request. Please re-submit your order");
+
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
     // 4️⃣ Handle Generic Exceptions (fallback)

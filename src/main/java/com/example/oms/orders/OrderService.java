@@ -9,6 +9,7 @@ import com.example.oms.product.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -35,7 +36,7 @@ public class OrderService {
             Inventory inventory = inventoryRepository.findByProductId(orderItemRequestDTO.getProductId()).orElseThrow(()-> new ResourceNotFoundException("Inventory with id not found"));
             int rowsChanged = inventoryRepository.reserveStock(product.getId(), orderItemRequestDTO.getQuantity(),inventory.getVersion());
             if(rowsChanged == 0){
-                throw new InsufficientInventoryException("Inventory does not contain enough quantity for the product: " + product.getName());
+                throw new ObjectOptimisticLockingFailureException(Inventory.class,product.getId());
             }
 
             OrderItem orderItem = new OrderItem();
