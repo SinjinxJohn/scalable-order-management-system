@@ -6,9 +6,11 @@ import com.example.oms.inventory.Inventory;
 import com.example.oms.inventory.InventoryRepository;
 import com.example.oms.product.Product;
 import com.example.oms.product.ProductRepository;
+import com.example.oms.shared.events.OrderCreatedEvent;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final InventoryRepository inventoryRepository;
     private final ModelMapper modelMapper;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
 
     @Transactional
@@ -55,7 +58,11 @@ public class OrderService {
         orderReponseDTO.setOrderItemIds(order.getOrderItems().stream()
                 .map(OrderItem::getId)
                 .toList());
-        
+        OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent(orderReponseDTO.getId(),"mock@gmail.com",orderReponseDTO.getTotalAmount(),orderReponseDTO.getCreatedAt());
+        System.out.println("🔥 DEBUG: OrderService is about to fire publishEvent() for Order ID: " + orderReponseDTO.getId());
+        applicationEventPublisher.publishEvent(orderCreatedEvent);
+        System.out.println("🚀 DEBUG: publishEvent() completed successfully inside OrderService!");
+
         return orderReponseDTO;
 
 

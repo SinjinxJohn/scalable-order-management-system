@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-@EntityListeners(value = AuditingEntityListener.class)
 @NoArgsConstructor
 public class IdempotencyRecord {
     @Id
@@ -30,7 +28,14 @@ public class IdempotencyRecord {
     @Column(nullable = false)
     private int responseStatus;
 
-    @CreatedDate
+    @Column(updatable = false,nullable = true)
     private LocalDateTime createdAt;
+
+    IdempotencyRecord(String idempotencyKey,String responseString,int responseStatus){
+        this.idempotencyKey = idempotencyKey;
+        this.responseString = responseString;
+        this.responseStatus = responseStatus;
+        this.createdAt = LocalDateTime.now();
+    }
 
 }
